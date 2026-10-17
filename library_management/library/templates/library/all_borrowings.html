@@ -1,0 +1,42 @@
+{% extends "library/base.html" %}
+{% block title %}All Borrowings{% endblock %}
+{% block content %}
+<h1>All borrowings</h1>
+<div class="grid" style="margin-bottom:1rem">
+  <div class="card"><strong>{{ total_books }}</strong><div class="muted">Book titles</div></div>
+  <div class="card"><strong>{{ active_count }}</strong><div class="muted">Currently issued</div></div>
+  <div class="card"><strong>{{ overdue_count }}</strong><div class="muted">Overdue</div></div>
+</div>
+<p>
+  <a class="btn gray" href="?">All</a>
+  <a class="btn gray" href="?status=active">Active</a>
+  <a class="btn gray" href="?status=overdue">Overdue</a>
+</p>
+<table>
+  <tr><th>Book</th><th>Member</th><th>Due</th><th>Status</th><th>Fine</th><th></th></tr>
+  {% for b in borrowings %}
+  <tr>
+    <td>{{ b.book.title }}</td>
+    <td>{{ b.member.username }}</td>
+    <td>{{ b.due_on|date:"d M Y" }}</td>
+    <td>
+      {% if b.is_returned %}<span class="badge ok">Returned</span>
+      {% elif b.is_overdue %}<span class="badge danger">Overdue</span>
+      {% else %}<span class="badge warn">Borrowed</span>{% endif %}
+    </td>
+    <td>{% if b.fine %}Rs. {{ b.fine }}{% else %}-{% endif %}</td>
+    <td>{% if not b.is_returned %}
+      <form class="inline" method="post" action="{% url 'return_book' b.pk %}">{% csrf_token %}<input type="hidden" name="from" value="all"><button class="btn" type="submit">Mark returned</button></form>
+    {% endif %}</td>
+  </tr>
+  {% empty %}<tr><td colspan="6">No records.</td></tr>
+  {% endfor %}
+</table>
+{% if is_paginated %}
+<div class="pager">
+  {% if page_obj.has_previous %}<a class="btn gray" href="?status={{ status }}&page={{ page_obj.previous_page_number }}">← Prev</a>{% endif %}
+  <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}<a class="btn gray" href="?status={{ status }}&page={{ page_obj.next_page_number }}">Next →</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "library/base.html" %}
+{% block title %}My Books{% endblock %}
+{% block content %}
+<h1>My borrowed books</h1>
+<table>
+  <tr><th>Book</th><th>Borrowed</th><th>Due</th><th>Status</th><th>Fine</th><th></th></tr>
+  {% for b in borrowings %}
+  <tr>
+    <td><a href="{% url 'book_detail' b.book.pk %}">{{ b.book.title }}</a></td>
+    <td>{{ b.borrowed_on|date:"d M Y" }}</td>
+    <td>{{ b.due_on|date:"d M Y" }}</td>
+    <td>
+      {% if b.is_returned %}<span class="badge ok">Returned {{ b.returned_on|date:"d M" }}</span>
+      {% elif b.is_overdue %}<span class="badge danger">Overdue</span>
+      {% else %}<span class="badge warn">Borrowed</span>{% endif %}
+    </td>
+    <td>{% if b.fine %}Rs. {{ b.fine }}{% else %}-{% endif %}</td>
+    <td>{% if not b.is_returned %}
+      <form class="inline" method="post" action="{% url 'return_book' b.pk %}">{% csrf_token %}<button class="btn" type="submit">Return</button></form>
+    {% endif %}</td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="6">You haven't borrowed any books yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

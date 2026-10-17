@@ -1,0 +1,30 @@
+{% extends "library/base.html" %}
+{% block title %}{{ book.title }}{% endblock %}
+{% block content %}
+<div class="card">
+  <h1 style="margin-top:0">{{ book.title }}</h1>
+  <p class="muted">by {{ book.author }} · ISBN {{ book.isbn }}{% if book.category %} · {{ book.category }}{% endif %}</p>
+  <p>{{ book.description|default:"No description." }}</p>
+  <p>
+    {% if book.is_available %}<span class="badge ok">{{ book.available_copies }} of {{ book.total_copies }} available</span>
+    {% else %}<span class="badge danger">All {{ book.total_copies }} copies issued</span>{% endif %}
+  </p>
+
+  {% if user.is_authenticated %}
+    {% if already_borrowed %}
+      <p class="muted">You currently have this book. <a href="{% url 'my_borrowings' %}">Go to My Books</a></p>
+    {% elif book.is_available %}
+      <form method="post" action="{% url 'borrow_book' book.pk %}" class="inline">{% csrf_token %}<button class="btn ok" type="submit">Borrow this book</button></form>
+    {% endif %}
+  {% else %}
+    <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to borrow this book.</p>
+  {% endif %}
+
+  {% if user.is_staff %}
+    <hr>
+    <a class="btn" href="{% url 'book_edit' book.pk %}">Edit</a>
+    <a class="btn danger" href="{% url 'book_delete' book.pk %}">Delete</a>
+  {% endif %}
+  <p><a href="{% url 'book_list' %}">← Back to books</a></p>
+</div>
+{% endblock %}

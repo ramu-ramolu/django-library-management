@@ -1,0 +1,39 @@
+
+{% extends "library/base.html" %}
+{% block title %}Books{% endblock %}
+{% block content %}
+
+<h1>Books</h1>
+<form class="filters" method="get">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search title, author or ISBN">
+  <select name="category">
+    <option value="">All categories</option>
+    {% for c in categories %}<option value="{{ c.id }}" {% if selected_category == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+  </select>
+  <button class="btn" type="submit">Search</button>
+</form>
+
+<div class="grid">
+  {% for book in books %}
+  <div class="card">
+    <h3 style="margin:0"><a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a></h3>
+    <p class="muted">{{ book.author }}{% if book.category %} · {{ book.category }}{% endif %}</p>
+    {% if book.is_available %}
+      <span class="badge ok">{{ book.available_copies }} of {{ book.total_copies }} available</span>
+    {% else %}
+      <span class="badge danger">Not available</span>
+    {% endif %}
+  </div>
+  {% empty %}
+  <p>No books found.</p>
+  {% endfor %}
+</div>
+
+{% if is_paginated %}
+<div class="pager">
+  {% if page_obj.has_previous %}<a class="btn gray" href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">← Prev</a>{% endif %}
+  <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}<a class="btn gray" href="?{{ querystring }}&page={{ page_obj.next_page_number }}">Next →</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "library/base.html" %}
+{% block title %}{% if object %}Edit{% else %}Add{% endif %} Book{% endblock %}
+{% block content %}
+<h1>{% if object %}Edit book{% else %}Add a book{% endif %}</h1>
+<form method="post" class="card" style="max-width:600px">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for field in form %}
+    <div class="row">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {{ field.errors }}
+    </div>
+  {% endfor %}
+  <button class="btn" type="submit">Save</button>
+  <a class="btn gray" href="{% url 'book_list' %}">Cancel</a>
+</form>
+{% endblock %}

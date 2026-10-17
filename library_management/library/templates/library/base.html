@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Library{% endblock %} | Library Management</title>
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+
+  <style>
+:root { --bg:#f5f6fa; --card:#deb887; --text:#1f2937; --muted:#6b7280; --primary:#2563eb; --danger:#dc2626; --ok:#16a34a; --warn:#d97706; --border:#c9ae85; }    * { box-sizing: border-box; }
+body {
+  margin:0; font-family: system-ui, sans-serif; color:var(--text);
+  background-color: var(--bg);
+  background-image: url("{% static 'images/library.jpg' %}");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}    nav { background:#111827; padding:.8rem 1.5rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+    nav a, nav button.link { color:#e5e7eb; text-decoration:none; background:none; border:0; font:inherit; cursor:pointer; }
+    nav a:hover, nav button.link:hover { color:#fff; }
+    nav .brand { font-weight:700; color:#fff; margin-right:auto; }
+main { max-width:1000px; margin:1.5rem auto; padding:1rem; background:rgba(255,255,255,.88); border-radius:10px; }    .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; }
+    .btn { display:inline-block; padding:.45rem .9rem; border-radius:6px; border:0; background:var(--primary); color:#fff; text-decoration:none; cursor:pointer; font:inherit; }
+    .btn.danger { background:var(--danger); } .btn.ok { background:var(--ok); } .btn.gray { background:#6b7280; }
+    .badge { padding:.1rem .5rem; border-radius:999px; font-size:.8rem; color:#fff; }
+    .badge.ok { background:var(--ok); } .badge.danger { background:var(--danger); } .badge.warn { background:var(--warn); }
+    .muted { color:var(--muted); font-size:.9rem; }
+    table { width:100%; border-collapse:collapse; background:var(--card); border-radius:10px; overflow:hidden; }
+    th, td { padding:.6rem .8rem; border-bottom:1px solid var(--border); text-align:left; }
+    th { background:#f3f4f6; }
+    input, select, textarea { width:100%; padding:.5rem; border:1px solid #d1d5db; border-radius:6px; font:inherit; }
+    .filters { display:flex; gap:.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+    .filters input { flex:2; min-width:200px; } .filters select { flex:1; min-width:140px; }
+    .msg { padding:.7rem 1rem; border-radius:8px; margin-bottom:.7rem; background:#e0f2fe; }
+    .msg.success { background:#dcfce7; } .msg.error { background:#fee2e2; } .msg.warning { background:#fef3c7; }
+    .errorlist { color:var(--danger); margin:.2rem 0; padding-left:1rem; }
+    .row { margin-bottom:.9rem; } label { font-weight:600; display:block; margin-bottom:.2rem; }
+    .pager { margin-top:1rem; display:flex; gap:1rem; align-items:center; }
+    form.inline { display:inline; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="{% url 'book_list' %}">📚 Library</a>
+  <a href="{% url 'book_list' %}">Books</a>
+  {% if user.is_authenticated %}
+    <a href="{% url 'my_borrowings' %}">My Books</a>
+    {% if user.is_staff %}
+      <a href="{% url 'book_add' %}">Add Book</a>
+      <a href="{% url 'all_borrowings' %}">All Borrowings</a>
+      <a href="{% url 'admin:index' %}">Admin</a>
+    {% endif %}
+    <span class="muted">Hi, {{ user.username }}</span>
+    <form class="inline" method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link" type="submit">Logout</button></form>
+  {% else %}
+    <a href="{% url 'login' %}">Login</a>
+    <a href="{% url 'register' %}">Register</a>
+  {% endif %}
+</nav>
+<main>
+  {% for message in messages %}<div class="msg {{ message.tags }}">{{ message }}</div>{% endfor %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>
