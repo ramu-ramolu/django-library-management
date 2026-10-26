@@ -25,22 +25,22 @@ Then open http://127.0.0.1:8000/ in your browser.
 
 ## Screenshots
 ### Home Page
-![Home page](homepage.png)
+![Home page](project_screenshots/homepage.png)
 
 ### Login
-![Login page](login.png)
+![Login page](project_screenshots/login.png)
 
 ### Register
-![Register page](registerpage.png)
+![Register page](project_screenshots/registerpage.png)
 
 ### User Dashboard
-![User page](userpage.png)
+![User page](project_screenshots/userpage.png)
 
 ### Borrowings
-![Borrowings page](borrowingspage.png)
+![Borrowings page](project_screenshots/borrowingspage.png)
 
 ### Admin Panel
-![Admin page](adminpage.png)
+![Admin page](project_screenshots/adminpage.png)
 
 ## Author
 Ramolu Ramu - [LinkedIn](https://linkedin.com/in/ramu-ramolu-pythonfullstack)
