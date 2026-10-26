@@ -24,7 +24,23 @@ python manage.py runserver
 Then open http://127.0.0.1:8000/ in your browser.
 
 ## Screenshots
-(Add 2-3 screenshots here)
+### Home Page
+![Home page](homepage.png)
+
+### Login
+![Login page](login.png)
+
+### Register
+![Register page](registerpage.png)
+
+### User Dashboard
+![User page](userpage.png)
+
+### Borrowings
+![Borrowings page](borrowingspage.png)
+
+### Admin Panel
+![Admin page](adminpage.png)
 
 ## Author
 Ramolu Ramu - [LinkedIn](https://linkedin.com/in/ramu-ramolu-pythonfullstack)
